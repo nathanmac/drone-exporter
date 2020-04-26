@@ -60,4 +60,6 @@ TODO - Add link to grafana dashboard download and example.
 
 ## Known issues
 
-- This exporter does not support paginated back through the build list therefore if a build to the primary branch is not 
+- This exporter does not support paginating back through the build list therefore if a build to the primary branch is not 
+  found in the initial list the build status will not be available.
+
