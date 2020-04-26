@@ -1,0 +1,51 @@
+---
+kind: pipeline
+name: default
+type: docker
+
+platform:
+  os: linux
+  arch: amd64
+
+steps:
+  - name: build
+    image: golang:1.14
+    commands:
+      - go build -o dist/drone-exporter main.go
+    environment:
+      GO111MODULE: on
+      GOPATH: /drone
+
+  - name: docker-dr
+    image: plugins/docker
+    settings:
+      repo: nathanmac/drone-exporter
+      dockerfile: Dockerfile
+      dry_run: true
+    when:
+      event:
+        - push
+      branch:
+        exclude:
+          - master
+    depends_on:
+      - build
+
+
+  - name: docker
+    image: plugins/docker
+    settings:
+      repo: nathanmac/drone-exporter
+      dockerfile: Dockerfile
+      username: nathanmac
+      password:
+        from_secret: DOCKER_PASSWORD
+      tags:
+        - latest
+    when:
+      event:
+        - push
+      branch:
+        - master
+    depends_on:
+      - build

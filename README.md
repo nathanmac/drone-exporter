@@ -4,8 +4,11 @@
 
 Monitor your drone builds and output to prometheus. This is done by calling the Drone API on a regular interval and updating the prometheus metrics.
 
-- Build states
-- Build counts
+These metrics include:
+
+- Build Status
+- Build Count
+- Total API Count
 
 ## Usage
 
@@ -51,9 +54,9 @@ drone_exporter_build_count{name="drone-exporter",namespace="nathanmac"} 42
 drone_exporter_build_status{name="drone-exporter",namespace="nathanmac"} 1
 ```
 
-# Grafana Dashboard
+## Grafana Dashboard
 
-TODO - Add link to grafana dashboard
+TODO - Add link to grafana dashboard download and example.
 
 ## Known issues
 
