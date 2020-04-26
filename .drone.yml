@@ -25,7 +25,7 @@ steps:
     when:
       event:
         exclude:
-          - push
+          - tag
     depends_on:
       - build
 
