@@ -20,6 +20,12 @@ We have a Docker image for you to use on docker hub. By default you'll need to e
 nathanmac/drone-exporter
 ```
 
+#### Running Docker Container
+
+```
+docker run -p 9100:9100 -e DRONE_EXPORTER_API_KEY=******** nathanmac/drone-exporter:latest
+```
+
 ### Environment Variables
 
 You can customise the service using a number of environment variables.
@@ -41,9 +47,9 @@ You can customise the service using a number of environment variables.
 This is an example of the output you get from the service.
 
 ```
-# HELP drone_exporter_api_count Number of API requests to the drone api
-# TYPE drone_exporter_api_count counter
-drone_exporter_api_count 2
+# HELP drone_exporter_api_request_count Number of API requests to the drone api
+# TYPE drone_exporter_api_request_count counter
+drone_exporter_api_request_count{url="https://cloud.drone.io/"} 7
 
 # HELP drone_exporter_build_count The number of builds of the repo
 # TYPE drone_exporter_build_count gauge

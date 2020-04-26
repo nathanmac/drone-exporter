@@ -16,3 +16,4 @@
 
 # Build Directory
 dist/
+*.tmp
