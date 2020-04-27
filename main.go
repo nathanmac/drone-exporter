@@ -51,8 +51,7 @@ var (
 	namespaceFilter = getEnv("NAMESPACE", "")
 	repoFilter      = getEnv("REPO", "")
 
-	//
-
+	// Repo Data
 	reposData map[int64]repoEntry = make(map[int64]repoEntry)
 )
 
@@ -134,7 +133,7 @@ func refreshRepoList() (map[int64]repoEntry, error) {
 		return nil, err
 	}
 
-	namespaceRegexp := regexp.MustCompile(repoFilter)
+	namespaceRegexp := regexp.MustCompile(namespaceFilter)
 	repoRegexp := regexp.MustCompile(repoFilter)
 
 	for _, repo := range repos {
