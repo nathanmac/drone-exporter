@@ -41,6 +41,7 @@ You can customise the service using a number of environment variables.
 | `DRONE_EXPORTER_INTERVAL_MINUTES` | `60`                       | The interval used to refresh the drone metrics                                            |
 | `DRONE_EXPORTER_METRICS_PREFIX`   | `drone_exporter`           | The prefix for the prometheus metrics names                                               |
 | `DRONE_EXPORTER_NAME`             | `default`                  | A name to put into prometheus metric keys to help identify, if using multiple instances   |
+| `DRONE_EXPORTER_LOG_LEVEL`        | `INFO`                     | Set the log level, defaults to INFO                                                       |
 
 ## Prometheus output
 
