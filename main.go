@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 	"os"
 	"regexp"
@@ -11,6 +10,7 @@ import (
 	"github.com/drone/drone-go/drone"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/sirupsen/logrus"
 	"golang.org/x/oauth2"
 )
 
@@ -30,7 +30,7 @@ type repoEntry struct {
 }
 
 var (
-	l *log.Logger = log.New(os.Stdout, "[drone-exporter] ", 2)
+	logger *logrus.Logger = logrus.New()
 
 	// Metrics
 	metricGaugesMap  map[string]*prometheus.GaugeVec
@@ -68,7 +68,7 @@ func getEnvInt(key string, fallback int) int {
 	if value, ok := os.LookupEnv("DRONE_EXPORTER_" + key); ok {
 		value, err := strconv.Atoi(value)
 		if err != nil {
-			l.Printf("Error converting interval: %s", err.Error())
+			logger.Errorf("Error converting interval: %s", err.Error())
 			os.Exit(1)
 		}
 		return value
@@ -186,12 +186,22 @@ func fetchBuildStatus(namespace, name, branch string) status {
 }
 
 func main() {
+	// Setup the logger
+	logLevel, err := logrus.ParseLevel(getEnv("LOG_LEVEL", "INFO"))
+	if err != nil {
+		logLevel = logrus.InfoLevel
+	}
+
+	logger.SetFormatter(&logrus.JSONFormatter{})
+	logger.SetOutput(os.Stdout)
+	logger.SetLevel(logLevel)
+
 	go func() {
 		for {
-			l.Println("Refreshing metrics")
+			logger.Debug("Refreshing metrics")
 			repos, err := refreshRepoList()
 			if err != nil {
-				l.Println("Failed to fetch the repo list:", err)
+				logger.Error("Failed to fetch the repo list:", err)
 			}
 
 			// Set the metrics for each repo in the repo list
@@ -211,7 +221,7 @@ func main() {
 		}
 	}()
 
-	l.Printf("Listening for HTTP requests at: 0.0.0.0:%v\n", httpPort)
+	logger.Infof("Listening for HTTP requests at: 0.0.0.0:%v", httpPort)
 	http.Handle("/"+httpPath, promhttp.Handler())
 	http.ListenAndServe(":"+httpPort, nil)
 }
